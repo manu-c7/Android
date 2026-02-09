@@ -2,39 +2,35 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#F5F5F5"
-    android:padding="8dp"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:padding="16dp"
+    android:background="@drawable/item_background">
 
     <ImageView
         android:id="@+id/ivThumbnail"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:scaleType="centerCrop"
-        android:src="@android:drawable/ic_menu_gallery"/>
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:scaleType="centerCrop" />
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:orientation="vertical"
-        android:layout_marginStart="10dp"
-        android:gravity="center_vertical">
+        android:layout_marginStart="16dp">
 
         <TextView
             android:id="@+id/tvTitle"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textSize="16sp"
-            android:textColor="#000000"
-            android:text="Título"/>
+            android:textAppearance="?attr/textAppearanceListItem" />
 
         <TextView
             android:id="@+id/tvDescription"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:maxLines="3"
-            android:ellipsize="end"
-            android:text="Descripción..."/>
+            android:textAppearance="?attr/textAppearanceListItemSecondary" />
+
     </LinearLayout>
+
 </LinearLayout>

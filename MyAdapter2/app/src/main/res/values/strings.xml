@@ -1,3 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">My Adapter</string>
+    <string name="app_name">NewsStitch Pro</string>
+    <string name="sheet_gid">0</string>
+    <string name="menu_search">Buscar...</string>
+    <string name="sort_date">Fecha</string>
+    <string name="sort_importance">Importancia</string>
+    <string name="notif_channel_name">Nuevas Noticias</string>
+    <string name="notif_title">¡Nueva noticia publicada!</string>
 </resources>

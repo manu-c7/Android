@@ -1,60 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.slidingpanelayout.widget.SlidingPaneLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sliding_pane_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="10dp">
+    tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Selecciona la vista:"
-        android:textStyle="bold"/>
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/list_container"
+        android:name="com.example.myadapter.ItemListFragment"
+        android:layout_width="400dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        tools:layout="@layout/fragment_item_list"/>
 
-    <Spinner
-        android:id="@+id/spinnerViewType"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/detail_container"
+        android:name="com.example.myadapter.ItemDetailFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="48dp"
-        android:layout_marginBottom="10dp"/>
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        tools:layout="@layout/fragment_item_detail"/>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ListView
-            android:id="@+id/listView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone"/>
-
-        <GridView
-            android:id="@+id/gridView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:numColumns="2"
-            android:horizontalSpacing="10dp"
-            android:verticalSpacing="10dp"
-            android:visibility="gone"/>
-
-        <StackView
-            android:id="@+id/stackView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:loopViews="true"
-            android:visibility="gone"/>
-
-        <Gallery
-            android:id="@+id/gallery"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:spacing="5dp"
-            android:visibility="gone"/>
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"/>
-    </FrameLayout>
-</LinearLayout>
+</androidx.slidingpanelayout.widget.SlidingPaneLayout>
