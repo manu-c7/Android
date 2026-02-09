@@ -21,6 +21,7 @@ public class NewsWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
+        Log.d("DEBUG_APP", "Iniciando descarga...");
         String gid = getApplicationContext().getString(R.string.sheet_gid);
         String urlString = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT-k1-Yj2e9L1e-T8Yj-3Z-1Y/pub?gid=" + gid + "&single=true&output=csv";
 
@@ -55,6 +56,7 @@ public class NewsWorker extends Worker {
                         String fecha = tokens[3];
                         int importancia = Integer.parseInt(tokens[4]);
                         db.insertNoticia(id, titulo, desc, fecha, importancia);
+                        Log.d("DEBUG_APP", "Insertando noticia: " + titulo);
                         hasNewData = true;
                     } catch (NumberFormatException e) {
                         Log.e("NewsWorker", "Error al parsear número en la línea: " + line);
@@ -64,6 +66,7 @@ public class NewsWorker extends Worker {
             db.close();
 
             if (hasNewData) {
+                Log.d("DEBUG_APP", "Notificando al fragmento...");
                 showNotification("Nuevos datos", "Se han actualizado las noticias.");
             }
 
