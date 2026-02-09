@@ -37,7 +37,7 @@ public class NewsWorker extends Worker {
 
             reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             NoticiasDB db = new NoticiasDB(getApplicationContext());
-            db.clearNoticias(); // Limpiamos los datos antiguos
+            db.getWritableDatabase().delete("noticias", null, null);
 
             String line;
             boolean isFirstLine = true;
@@ -55,7 +55,7 @@ public class NewsWorker extends Worker {
                         String desc = tokens[2];
                         String fecha = tokens[3];
                         int importancia = Integer.parseInt(tokens[4]);
-                        db.insertNoticia(id, titulo, desc, fecha, importancia);
+                        db.insertarNoticia(id, titulo, desc, fecha, importancia);
                         Log.d("DEBUG_APP", "Insertando noticia: " + titulo);
                         hasNewData = true;
                     } catch (NumberFormatException e) {

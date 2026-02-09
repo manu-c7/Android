@@ -53,7 +53,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
         public ViewHolder(View itemView) {
             super(itemView);
-            titulo = itemView.findViewById(R.id.tvTitle);
+            titulo = itemView.findViewById(R.id.tvTitulo);
         }
     }
 }

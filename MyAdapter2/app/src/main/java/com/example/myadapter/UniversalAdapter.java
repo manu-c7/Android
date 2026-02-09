@@ -46,8 +46,8 @@ public class UniversalAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.item_layout, parent, false);
             holder = new ViewHolder();
-            holder.title = convertView.findViewById(R.id.tvTitle);
-            holder.description = convertView.findViewById(R.id.tvDescription);
+            holder.title = convertView.findViewById(R.id.tvTitulo);
+            holder.description = convertView.findViewById(R.id.tvFecha);
             holder.thumbnail = convertView.findViewById(R.id.ivThumbnail);
             convertView.setTag(holder);
         } else {

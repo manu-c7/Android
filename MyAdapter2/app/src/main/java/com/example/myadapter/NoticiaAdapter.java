@@ -31,7 +31,7 @@ public class NoticiaAdapter extends RecyclerView.Adapter<NoticiaAdapter.NoticiaV
     public NoticiaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Inflamos el diseño de la fila (asegúrate de tener item_noticia.xml)
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_noticia, parent, false);
+                .inflate(R.layout.item_layout, parent, false);
         return new NoticiaViewHolder(view);
     }
 

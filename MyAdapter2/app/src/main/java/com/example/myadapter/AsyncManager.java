@@ -3,35 +3,67 @@ package com.example.myadapter;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class AsyncManager {
-    public interface AsyncCallback { void onComplete(String type, long time); }
 
-    public void runThread(AsyncCallback cb) {
-        long start = System.currentTimeMillis();
-        new Thread(() -> { 
-            simulateProcess(); 
-            new Handler(Looper.getMainLooper()).post(() -> cb.onComplete("Thread", System.currentTimeMillis() - start));
+    // Interface para devolver los resultados a la UI
+    public interface AsyncCallback {
+        void onComplete(String tipo, long tiempo);
+    }
+
+    // 1. MÉTODO: THREAD PURO (El que te daba el error)
+    public void runThread(AsyncCallback callback) {
+        long startTime = System.currentTimeMillis();
+        new Thread(() -> {
+            simularCargaDensa(); // Tarea pesada
+            long endTime = System.currentTimeMillis() - startTime;
+
+            // Volver al hilo principal para actualizar la tabla
+            new Handler(Looper.getMainLooper()).post(() ->
+                    callback.onComplete("Java Thread", endTime));
         }).start();
     }
 
-    public void runExecutor(AsyncCallback cb) {
-        long start = System.currentTimeMillis();
-        Executors.newSingleThreadExecutor().execute(() -> {
-            simulateProcess();
-            new Handler(Looper.getMainLooper()).post(() -> cb.onComplete("Executor", System.currentTimeMillis() - start));
+    // 2. MÉTODO: EXECUTOR SERVICE
+    public void runExecutor(AsyncCallback callback) {
+        long startTime = System.currentTimeMillis();
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+
+        executor.execute(() -> {
+            simularCargaDensa();
+            long endTime = System.currentTimeMillis() - startTime;
+
+            new Handler(Looper.getMainLooper()).post(() ->
+                    callback.onComplete("ExecutorService", endTime));
         });
     }
 
+    // 3. MÉTODO: ASYNC TASK (Deprecado - Para la comparativa)
     @SuppressWarnings("deprecation")
-    public void runAsyncTask(AsyncCallback cb) {
-        long start = System.currentTimeMillis();
+    public void runAsyncTask(AsyncCallback callback) {
+        final long startTime = System.currentTimeMillis();
         new AsyncTask<Void, Void, Long>() {
-            protected Long doInBackground(Void... v) { simulateProcess(); return System.currentTimeMillis() - start; }
-            protected void onPostExecute(Long t) { cb.onComplete("AsyncTask", t); }
+            @Override
+            protected Long doInBackground(Void... voids) {
+                simularCargaDensa();
+                return System.currentTimeMillis() - startTime;
+            }
+
+            @Override
+            protected void onPostExecute(Long tiempo) {
+                callback.onComplete("AsyncTask (Deprecated)", tiempo);
+            }
         }.execute();
     }
 
-    private void simulateProcess() { try { Thread.sleep(200); } catch (Exception ignored) {} }
+    // Método para que el test dure lo suficiente para ser medido
+    private void simularCargaDensa() {
+        try {
+            Thread.sleep(250); // Simulamos procesamiento de datos
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 }
