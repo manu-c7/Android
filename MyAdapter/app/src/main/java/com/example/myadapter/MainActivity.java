@@ -2,154 +2,95 @@ package com.example.myadapter;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.Executors;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
 
-// Suprimimos advertencias porque Gallery es antiguo
-@SuppressWarnings("deprecation")
-public class MainActivity extends AppCompatActivity {
+import java.util.Comparator;
 
-    private UniversalAdapter adapter;
-    private final ArrayList<NewsItem> newsList = new ArrayList<>();
-    private List<AdapterView<?>> allViews;
-    private ListView listView;
-    private GridView gridView;
-    private StackView stackView;
-    private Gallery gallery;
-    private ProgressBar progressBar;
+public class MainActivity extends AppCompatActivity implements NewsListFragment.OnNewsItemSelectedListener {
 
-    private static final String CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTlt1YnutG2VNjh6rgFLM1AqKQXY2YwoR-gutF_gh3l_rEIi_ved1h5aPRSoh0OpMtPD4ACOkEsiSPl/pub?output=csv";
+    private NewsListFragment newsListFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        initViews();
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        // 1. Inicializamos el adaptador
-        adapter = new UniversalAdapter(this, newsList);
-
-        // 2. Asignamos el adaptador a TODAS las vistas.
-        listView.setAdapter(adapter);
-        gridView.setAdapter(adapter);
-        stackView.setAdapter(adapter);
-        gallery.setAdapter(adapter);
-
-        setupListeners();
-    }
-
-    private void initViews() {
-        listView = findViewById(R.id.listView);
-        gridView = findViewById(R.id.gridView);
-        stackView = findViewById(R.id.stackView);
-        gallery = findViewById(R.id.gallery);
-        progressBar = findViewById(R.id.progressBar);
-
-        // Agrupamos las vistas en una lista para facilitar su manejo (ocultar/mostrar)
-        allViews = new ArrayList<>(Arrays.asList(listView, gridView, stackView, gallery));
+        newsListFragment = (NewsListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if (newsListFragment == null) {
+            // For two-pane layout
+            newsListFragment = (NewsListFragment) getSupportFragmentManager().findFragmentById(R.id.list_container);
+        }
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        // 3. Carga de datos optimizada: Solo descarga si la lista está vacía
-        if (newsList.isEmpty()) {
-            downloadCsvData();
-        }
-    }
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
 
-    private void setupListeners() {
-        // Un solo listener para todas las vistas
-        AdapterView.OnItemClickListener commonClickListener = (parent, view, position, id) -> {
-            Intent intent = new Intent(this, DetailActivity.class);
-            NewsItem item = newsList.get(position); // Es seguro usar la lista directa si la posición coincide
-            intent.putExtra("EXTRA_ITEM", item);
-            startActivity(intent);
-        };
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
 
-        listView.setOnItemClickListener(commonClickListener);
-        gridView.setOnItemClickListener(commonClickListener);
-        stackView.setOnItemClickListener(commonClickListener);
-        gallery.setOnItemClickListener(commonClickListener);
-
-        setupSpinner();
-    }
-
-    private void setupSpinner() {
-        Spinner spinner = findViewById(R.id.spinnerViewType);
-        String[] options = {"ListView (Lista)", "GridView (Cuadrícula)", "StackView (Pila)", "Gallery (Galería)"};
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, options);
-        spinner.setAdapter(spinnerAdapter);
-
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                // Lógica limpia para cambiar vistas
-                updateActiveView(allViews.get(position));
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
-        });
-    }
-
-    private void updateActiveView(AdapterView<?> viewToShow) {
-        for (AdapterView<?> view : allViews) {
-            view.setVisibility(view == viewToShow ? View.VISIBLE : View.GONE);
-        }
-    }
-
-    private void downloadCsvData() {
-        progressBar.setVisibility(View.VISIBLE);
-
-        Executors.newSingleThreadExecutor().execute(() -> {
-            final List<NewsItem> tempNewsList = new ArrayList<>();
-            Handler handler = new Handler(Looper.getMainLooper());
-
-            try {
-                URL url = new URL(CSV_URL);
-                BufferedReader reader = new BufferedReader(new InputStreamReader(url.openConnection().getInputStream()));
-
-                String line;
-                reader.readLine(); 
-
-                while ((line = reader.readLine()) != null) {
-                    String[] tokens = line.split(",");
-                    if (tokens.length >= 5) {
-                        tempNewsList.add(new NewsItem(tokens[0], tokens[1], tokens[2], tokens[3], tokens[4]));
-                    }
+            public boolean onQueryTextSubmit(String query) {
+                if (newsListFragment != null) {
+                    newsListFragment.filter(query);
                 }
-                reader.close();
+                return true;
+            }
 
-                handler.post(() -> {
-                    newsList.clear();
-                    newsList.addAll(tempNewsList);
-                    adapter.notifyDataSetChanged();
-                    progressBar.setVisibility(View.GONE);
-
-                    if (newsList.isEmpty()) {
-                        Toast.makeText(MainActivity.this, "No se encontraron datos", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                handler.post(() -> {
-                    progressBar.setVisibility(View.GONE);
-                    Toast.makeText(MainActivity.this, "Error de conexión: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                });
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (newsListFragment != null) {
+                    newsListFragment.filter(newText);
+                }
+                return true;
             }
         });
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (newsListFragment == null) {
+            return super.onOptionsItemSelected(item);
+        }
+
+        int itemId = item.getItemId();
+        if (itemId == R.id.action_sort_by_date) {
+            newsListFragment.sort(Comparator.comparing(NewsItem::getPublicationDate).reversed());
+            return true;
+        } else if (itemId == R.id.action_sort_by_importance) {
+            newsListFragment.sort(Comparator.comparingInt(NewsItem::getImportance).reversed());
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onNewsItemSelected(NewsItem newsItem) {
+        View detailContainer = findViewById(R.id.detail_container);
+
+        if (detailContainer != null) {
+            // Two-pane layout
+            NewsDetailFragment fragment = NewsDetailFragment.newInstance(newsItem);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.detail_container, fragment)
+                    .commit();
+        } else {
+            // Single-pane layout
+            Intent intent = new Intent(this, DetailActivity.class);
+            intent.putExtra("EXTRA_ITEM", newsItem);
+            startActivity(intent);
+        }
     }
 }

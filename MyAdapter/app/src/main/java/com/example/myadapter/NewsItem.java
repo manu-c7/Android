@@ -1,6 +1,7 @@
 package com.example.myadapter;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class NewsItem implements Serializable {
     private final String title;
@@ -8,13 +9,17 @@ public class NewsItem implements Serializable {
     private final String thumbUrl;
     private final String content;
     private final String largeImageUrl;
+    private final Date publicationDate;
+    private final int importance;
 
-    public NewsItem(String title, String shortDescription, String thumbUrl, String content, String largeImageUrl) {
+    public NewsItem(String title, String shortDescription, String thumbUrl, String content, String largeImageUrl, Date publicationDate, int importance) {
         this.title = title;
         this.shortDescription = shortDescription;
         this.thumbUrl = thumbUrl;
         this.content = content;
         this.largeImageUrl = largeImageUrl;
+        this.publicationDate = publicationDate;
+        this.importance = importance;
     }
 
     public String getTitle() {
@@ -35,5 +40,13 @@ public class NewsItem implements Serializable {
 
     public String getLargeImageUrl() {
         return largeImageUrl;
+    }
+
+    public Date getPublicationDate() {
+        return publicationDate;
+    }
+
+    public int getImportance() {
+        return importance;
     }
 }

@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">My Adapter</string>
+
+    <!-- MainActivity -->
+    <string name="toolbar_title">Noticias</string>
+    <string name="search_title">Buscar</string>
+    <string name="sort_title">Ordenar</string>
+    <string name="sort_by_date">Ordenar por Fecha</string>
+    <string name="sort_by_importance">Ordenar por Importancia</string>
+
+    <!-- NewsListFragment -->
+    <string name="no_data_found">No se encontraron datos</string>
+    <string name="connection_error">Error de conexión: %s</string>
+
 </resources>
