@@ -16,6 +16,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.opencsv.CSVReader;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -39,6 +41,7 @@ public class NewsListFragment extends Fragment {
     private static final String CSV_URL_ES = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT3gYOrCad2830q8ulaGFH-oe9Xt0j_onz3sZ59UcB_TKFZzxBT-q4FjUnGDfY_cfww1Q1i0_xknMPc/pub?gid=0&single=true&output=csv";
     private static final String CSV_URL_EN = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT3gYOrCad2830q8ulaGFH-oe9Xt0j_onz3sZ59UcB_TKFZzxBT-q4FjUnGDfY_cfww1Q1i0_xknMPc/pub?gid=1677284472&single=true&output=csv";
     private static final String CSV_URL_FR = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT3gYOrCad2830q8ulaGFH-oe9Xt0j_onz3sZ59UcB_TKFZzxBT-q4FjUnGDfY_cfww1Q1i0_xknMPc/pub?gid=1900680414&single=true&output=csv";
+
 
     public interface OnNewsItemSelectedListener {
         void onNewsItemSelected(NewsItem newsItem);
@@ -103,16 +106,12 @@ public class NewsListFragment extends Fragment {
             final List<NewsItem> tempNewsList = new ArrayList<>();
             Handler handler = new Handler(Looper.getMainLooper());
 
-            try {
-                URL url = new URL(getUrlForCurrentLanguage());
-                BufferedReader reader = new BufferedReader(new InputStreamReader(url.openConnection().getInputStream()));
-                reader.readLine(); // Skip header
-
+            try (CSVReader reader = new CSVReader(new InputStreamReader(new URL(getUrlForCurrentLanguage()).openStream()))) {
+                reader.skip(1); // Skip header row
+                String[] tokens;
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
-                String line;
 
-                while ((line = reader.readLine()) != null) {
-                    String[] tokens = line.split(",");
+                while ((tokens = reader.readNext()) != null) {
                     if (tokens.length >= 5) {
                         Date date = new Date(); // Default date
                         int importance = 0; // Default importance
@@ -122,13 +121,12 @@ public class NewsListFragment extends Fragment {
                                 date = dateFormat.parse(tokens[5]);
                                 importance = Integer.parseInt(tokens[6]);
                             } catch (Exception e) {
-                                Log.e("CSV_PARSE_ERROR", "Failed to parse date/importance for line: " + line, e);
+                                Log.e("CSV_PARSE_ERROR", "Failed to parse date/importance for line: " + String.join(",", tokens), e);
                             }
                         }
                         tempNewsList.add(new NewsItem(tokens[0], tokens[1], tokens[2], tokens[3], tokens[4], date, importance));
                     }
                 }
-                reader.close();
 
                 handler.post(() -> {
                     allNews.clear();

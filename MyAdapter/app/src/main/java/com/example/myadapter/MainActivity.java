@@ -1,5 +1,6 @@
 package com.example.myadapter;
 
+import android.animation.LayoutTransition;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -8,6 +9,7 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.WindowCompat;
 
 import java.util.Comparator;
 
@@ -18,10 +20,18 @@ public class MainActivity extends AppCompatActivity implements NewsListFragment.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // 1. Enable edge-to-edge display
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        // Add a LayoutTransition to animate changes in the toolbar
+        LayoutTransition layoutTransition = new LayoutTransition();
+        layoutTransition.enableTransitionType(LayoutTransition.CHANGING);
+        toolbar.setLayoutTransition(layoutTransition);
 
         newsListFragment = (NewsListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         if (newsListFragment == null) {

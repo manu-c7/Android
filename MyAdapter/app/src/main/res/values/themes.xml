@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.MyAdapter" parent="Theme.Material3.DayNight.NoActionBar">
@@ -6,4 +7,62 @@
     </style>
 
     <style name="Theme.MyAdapter" parent="Base.Theme.MyAdapter" />
+
+    <!-- Custom App Theme -->
+    <style name="Theme.App.MyNewsApp" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@color/backgroundColor</item>
+        <item name="android:textColorPrimary">@color/textColorPrimary</item>
+        <item name="android:textColorSecondary">@color/textColorSecondary</item>
+
+        <!-- Toolbar Style -->
+        <item name="toolbarStyle">@style/AppToolbarStyle</item>
+
+        <!-- CardView Style -->
+        <item name="materialCardViewStyle">@style/AppCardViewStyle</item>
+    </style>
+
+    <!-- Custom Toolbar Style -->
+    <style name="AppToolbarStyle" parent="Widget.AppCompat.Toolbar">
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="titleTextColor">@color/white</item>
+    </style>
+
+    <!-- Custom CardView Style -->
+    <style name="AppCardViewStyle" parent="Widget.MaterialComponents.CardView">
+        <item name="cardCornerRadius">10dp</item>
+        <item name="cardElevation">4dp</item>
+        <item name="android:layout_margin">8dp</item>
+    </style>
+
+    <!-- Text Styles -->
+    <style name="TextAppearance.App.Title" parent="TextAppearance.AppCompat.Title">
+        <item name="android:fontFamily">@font/roboto_slab</item>
+        <item name="android:textColor">@color/textColorPrimary</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="TextAppearance.App.Body" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:fontFamily">@font/roboto</item>
+        <item name="android:textColor">@color/textColorSecondary</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="TextAppearance.App.DetailTitle" parent="TextAppearance.App.Title">
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="TextAppearance.App.DetailBody" parent="TextAppearance.App.Body">
+        <item name="android:textSize">16sp</item>
+        <item name="android:lineSpacingMultiplier">1.2</item>
+    </style>
+
+    <!-- Icon Style -->
+    <style name="AppIconStyle">
+        <item name="android:layout_width">16dp</item>
+        <item name="android:layout_height">16dp</item>
+        <item name="android:tint">@color/textColorSecondary</item>
+    </style>
+
 </resources>

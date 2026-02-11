@@ -44,11 +44,11 @@ public class UniversalAdapter extends BaseAdapter {
         ViewHolder holder;
 
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.item_layout, parent, false);
+            convertView = inflater.inflate(R.layout.item_news, parent, false);
             holder = new ViewHolder();
             holder.title = convertView.findViewById(R.id.tvTitle);
-            holder.description = convertView.findViewById(R.id.tvDescription);
-            holder.thumbnail = convertView.findViewById(R.id.ivThumbnail);
+            holder.shortDescription = convertView.findViewById(R.id.tvShortDescription);
+            holder.thumbnail = convertView.findViewById(R.id.ivThumb);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -56,22 +56,20 @@ public class UniversalAdapter extends BaseAdapter {
 
         NewsItem item = dataSource.get(position);
         holder.title.setText(item.getTitle());
-        holder.description.setText(item.getShortDescription());
+        holder.shortDescription.setText(item.getShortDescription());
 
         if (item.getThumbUrl() != null && !item.getThumbUrl().isEmpty()) {
             imageDownloader.download(item.getThumbUrl(), holder.thumbnail);
         } else {
-            // Buena práctica: limpiar la imagen si no hay una para el elemento actual.
             holder.thumbnail.setImageDrawable(null);
         }
 
         return convertView;
     }
 
-    // El ViewHolder que almacena las referencias a las vistas para evitar el findViewById() repetido.
     private static class ViewHolder {
         TextView title;
-        TextView description;
+        TextView shortDescription;
         ImageView thumbnail;
     }
 }

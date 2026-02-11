@@ -42,4 +42,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    // Add OpenCSV for robust CSV parsing
+    implementation("com.opencsv:opencsv:5.9")
 }

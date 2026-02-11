@@ -7,8 +7,11 @@
         android:id="@+id/gridView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:numColumns="2"
+        android:clipToPadding="false"
         android:horizontalSpacing="10dp"
+        android:numColumns="2"
+        android:paddingTop="8dp"
+        android:paddingBottom="80dp"
         android:verticalSpacing="10dp" />
 
     <ProgressBar
@@ -16,6 +19,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
 </FrameLayout>
