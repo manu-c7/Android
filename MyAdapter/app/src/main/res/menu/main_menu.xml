@@ -24,4 +24,10 @@
         </menu>
     </item>
 
+    <item
+        android:id="@+id/action_settings"
+        android:icon="@android:drawable/ic_menu_manage"
+        android:title="Ajustes"
+        app:showAsAction="never" />
+
 </menu>

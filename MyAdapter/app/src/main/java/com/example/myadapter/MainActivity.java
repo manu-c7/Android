@@ -10,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.WindowCompat;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 import java.util.Comparator;
 
@@ -70,16 +72,21 @@ public class MainActivity extends AppCompatActivity implements NewsListFragment.
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (newsListFragment == null) {
-            return super.onOptionsItemSelected(item);
-        }
 
         int itemId = item.getItemId();
         if (itemId == R.id.action_sort_by_date) {
-            newsListFragment.sort(Comparator.comparing(NewsItem::getPublicationDate).reversed());
+            if (newsListFragment != null) {
+                newsListFragment.sort(Comparator.comparing(NewsItem::getPublicationDate).reversed());
+            }
             return true;
         } else if (itemId == R.id.action_sort_by_importance) {
-            newsListFragment.sort(Comparator.comparingInt(NewsItem::getImportance).reversed());
+            if (newsListFragment != null) {
+                newsListFragment.sort(Comparator.comparingInt(NewsItem::getImportance).reversed());
+            }
+            return true;
+        } else if (itemId == R.id.action_settings) {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
             return true;
         }
 

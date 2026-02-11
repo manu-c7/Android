@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:title="Notificaciones">
+
+        <SwitchPreferenceCompat
+            app:key="notifications_enabled"
+            app:title="Activar notificaciones de noticias"
+            app:defaultValue="false" />
+
+        <ListPreference
+            app:key="notification_interval"
+            app:title="Frecuencia de actualización"
+            app:summary="%s"
+            app:defaultValue="900000"
+            app:entries="@array/notification_interval_entries"
+            app:entryValues="@array/notification_interval_values"
+            app:dependency="notifications_enabled" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

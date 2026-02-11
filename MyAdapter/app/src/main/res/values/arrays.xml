@@ -1,7 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Preloaded fonts -->
     <array name="preloaded_fonts">
         <item>@font/roboto</item>
         <item>@font/roboto_slab</item>
     </array>
+
+    <!-- Notification interval entries (for display) -->
+    <string-array name="notification_interval_entries">
+        <item>Cada 15 minutos</item>
+        <item>Cada 30 minutos</item>
+        <item>Cada hora</item>
+        <item>Cada 4 horas</item>
+        <item>Nunca</item>
+    </string-array>
+
+    <!-- Notification interval values (in milliseconds) -->
+    <string-array name="notification_interval_values">
+        <item>900000</item>
+        <item>1800000</item>
+        <item>3600000</item>
+        <item>14400000</item>
+        <item>-1</item>
+    </string-array>
 </resources>

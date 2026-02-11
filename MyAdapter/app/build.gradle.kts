@@ -45,4 +45,16 @@ dependencies {
 
     // Add OpenCSV for robust CSV parsing
     implementation("com.opencsv:opencsv:5.9")
+
+    // Preferences for settings screen
+    implementation("androidx.preference:preference-ktx:1.2.1")
+
+    // WorkManager for background tasks
+    implementation("androidx.work:work-runtime-ktx:2.9.0")
+
+    // Swipe to refresh
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+
+    // Lifecycle components for application-level observer
+    implementation("androidx.lifecycle:lifecycle-process:2.7.0")
 }

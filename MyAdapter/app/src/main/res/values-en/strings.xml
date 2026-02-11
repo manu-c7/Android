@@ -12,4 +12,10 @@
     <string name="no_data_found">No data found</string>
     <string name="connection_error">Connection error: %s</string>
 
+    <!-- Notifications -->
+    <string name="notification_channel_name">News</string>
+    <string name="notification_channel_description">Channel for new news notifications</string>
+    <string name="notification_title">New news!</string>
+    <string name="notification_text">There are %d new news items available.</string>
+
 </resources>

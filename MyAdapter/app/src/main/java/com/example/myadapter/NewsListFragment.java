@@ -18,7 +18,6 @@ import androidx.fragment.app.Fragment;
 
 import com.opencsv.CSVReader;
 
-import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -37,11 +36,6 @@ public class NewsListFragment extends Fragment {
     private final ArrayList<NewsItem> allNews = new ArrayList<>();
     private GridView gridView;
     private ProgressBar progressBar;
-
-    private static final String CSV_URL_ES = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT3gYOrCad2830q8ulaGFH-oe9Xt0j_onz3sZ59UcB_TKFZzxBT-q4FjUnGDfY_cfww1Q1i0_xknMPc/pub?gid=0&single=true&output=csv";
-    private static final String CSV_URL_EN = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT3gYOrCad2830q8ulaGFH-oe9Xt0j_onz3sZ59UcB_TKFZzxBT-q4FjUnGDfY_cfww1Q1i0_xknMPc/pub?gid=1677284472&single=true&output=csv";
-    private static final String CSV_URL_FR = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT3gYOrCad2830q8ulaGFH-oe9Xt0j_onz3sZ59UcB_TKFZzxBT-q4FjUnGDfY_cfww1Q1i0_xknMPc/pub?gid=1900680414&single=true&output=csv";
-
 
     public interface OnNewsItemSelectedListener {
         void onNewsItemSelected(NewsItem newsItem);
@@ -80,22 +74,25 @@ public class NewsListFragment extends Fragment {
                 listener.onNewsItemSelected(newsList.get(position));
             }
         });
+    }
 
-        if (allNews.isEmpty()) {
-            downloadCsvData();
-        }
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Always download fresh data when the fragment becomes visible
+        downloadCsvData();
     }
 
     private String getUrlForCurrentLanguage() {
         String language = Locale.getDefault().getLanguage();
         switch (language) {
             case "en":
-                return CSV_URL_EN;
+                return "https://docs.google.com/spreadsheets/d/e/2PACX-1vT3gYOrCad2830q8ulaGFH-oe9Xt0j_onz3sZ59UcB_TKFZzxBT-q4FjUnGDfY_cfww1Q1i0_xknMPc/pub?gid=1677284472&single=true&output=csv";
             case "fr":
-                return CSV_URL_FR;
+                return "https://docs.google.com/spreadsheets/d/e/2PACX-1vT3gYOrCad2830q8ulaGFH-oe9Xt0j_onz3sZ59UcB_TKFZzxBT-q4FjUnGDfY_cfww1Q1i0_xknMPc/pub?gid=1900680414&single=true&output=csv";
             case "es":
             default:
-                return CSV_URL_ES;
+                return "https://docs.google.com/spreadsheets/d/e/2PACX-1vT3gYOrCad2830q8ulaGFH-oe9Xt0j_onz3sZ59UcB_TKFZzxBT-q4FjUnGDfY_cfww1Q1i0_xknMPc/pub?gid=0&single=true&output=csv";
         }
     }
 
